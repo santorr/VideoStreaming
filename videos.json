@@ -1,0 +1,14 @@
+[
+    {
+      "src": "https://cdn.jsdelivr.net/gh/santorr/VideoStreaming/Videos/video2.mp4",
+      "title": "Deuxième Vidéo",
+      "description": "Un aperçu du processus de motion capture.",
+      "date": "2025-04-20T10:30:00Z"
+    },
+    {
+      "src": "https://cdn.jsdelivr.net/gh/santorr/VideoStreaming/Videos/video1.mp4",
+      "title": "Première Vidéo",
+      "description": "Notre toute première démonstration en ligne.",
+      "date": "2025-03-15T09:00:00Z"
+    }
+]

@@ -11,12 +11,7 @@ const descEl = overlay.querySelector('p');
 const soundLoudPath = "M361.299413,341.610667 L328.014293,314.98176 C402.206933,233.906133 402.206933,109.96608 328.013013,28.8906667 L361.298133,2.26304 C447.910187,98.97536 447.908907,244.898347 361.299413,341.610667 Z M276.912853,69.77216 L243.588693,96.4309333 C283.38432,138.998613 283.38304,204.87488 243.589973,247.44256 L276.914133,274.101333 C329.118507,215.880107 329.118507,127.992107 276.912853,69.77216 Z M191.749973,1.42108547e-14 L80.8957867,87.2292267 L7.10542736e-15,87.2292267 L7.10542736e-15,257.895893 L81.0208,257.895893 L191.749973,343.35424 L191.749973,1.42108547e-14 Z";
 const soundOffPath = "M47.0849493,-1.42108547e-14 L298.668,251.583611 L304.101001,257.015597 L304.101,257.016 L353.573532,306.488791 C353.573732,306.488458 353.573933,306.488124 353.574133,306.48779 L384.435257,337.348961 L384.434,337.349 L409.751616,362.666662 L379.581717,392.836561 L191.749,205.003 L191.749973,369.105851 L81.0208,283.647505 L7.10542736e-15,283.647505 L7.10542736e-15,112.980838 L80.8957867,112.980838 L91.433,104.688 L16.9150553,30.169894 L47.0849493,-1.42108547e-14 Z M361.298133,28.0146513 C429.037729,103.653701 443.797162,209.394226 405.578884,298.151284 L372.628394,265.201173 C396.498256,194.197542 381.626623,113.228555 328.013013,54.642278 L361.298133,28.0146513 Z M276.912853,95.5237713 C305.539387,127.448193 318.4688,168.293162 315.701304,208.275874 L266.464558,159.040303 C261.641821,146.125608 254.316511,133.919279 244.488548,123.156461 L243.588693,122.182545 L276.912853,95.5237713 Z M191.749973,25.7516113 L191.749,84.3256113 L158.969,51.5456113 L191.749973,25.7516113 Z";
 
-const videoList = [
-  { src: 'videos/video1.mp4', title: 'Vidéo 1', description: 'Description 1' },
-  { src: 'videos/video2.mp4', title: 'Vidéo 2', description: 'Description 2' },
-  { src: 'videos/video3.mp4', title: 'Vidéo 3', description: 'Description 3' },
-];
-
+let videoList = [];
 let currentIndex = 0;
 let isSwitching = false;
 
@@ -41,9 +36,7 @@ function loadVideo(index) {
   if (index < 0 || index >= videoList.length) return;
 
   const data = videoList[index];
-  //video.src = data.src;
-  //https://www.dropbox.com/scl/fi/29llsbc8vy1ysw7b9gb9c/video2.mp4?rlkey=bqswt5t33jsj44gynx7lply2s&st=2i7f0rpf&dl=0
-  video.src = "https://cdn.jsdelivr.net/gh/santorr/VideoStreaming/video1.mp4";
+  video.src = data.src;
   titleEl.textContent = data.title;
   descEl.textContent = data.description;
   video.play();
@@ -80,7 +73,7 @@ video.addEventListener('pause', () => {
 });
 
 window.addEventListener('wheel', (e) => {
-  if (isSwitching) return;
+  if (isSwitching || videoList.length === 0) return;
 
   if (e.deltaY > 50 && currentIndex < videoList.length - 1) {
     currentIndex++;
@@ -97,7 +90,20 @@ window.addEventListener('wheel', (e) => {
   }
 });
 
-loadVideo(currentIndex);
-video.muted = false;
-setSoundIcon(soundLoudPath);
-video.play();
+async function init() {
+  try {
+    const res = await fetch('videos.json');
+    const json = await res.json();
+
+    // Trier par date décroissante
+    videoList = json.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+    loadVideo(currentIndex);
+    video.muted = false;
+    setSoundIcon(soundLoudPath);
+  } catch (err) {
+    console.error("Erreur de chargement des vidéos :", err);
+  }
+}
+
+init();
