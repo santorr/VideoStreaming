@@ -1,3 +1,4 @@
+
 const wrapper = document.querySelector('.video-wrapper');
 const videoBox = wrapper.querySelector('.video-box');
 const video = wrapper.querySelector('video');
@@ -14,6 +15,17 @@ const soundOffPath = "M47.0849493,-1.42108547e-14 L298.668,251.583611 L304.10100
 let videoList = [];
 let currentIndex = 0;
 let isSwitching = false;
+
+async function fetchVideoList() {
+  try {
+    const response = await fetch('.../api/getVideos.php');
+    if (!response.ok) throw new Error('Réponse invalide');
+    videoList = await response.json();
+    loadVideo(currentIndex);
+  } catch (err) {
+    console.error("Erreur de chargement des vidéos :", err);
+  }
+}
 
 function setPauseIcon(svgPath, viewBox = "0 0 8 8") {
   pauseBtn.innerHTML = `
@@ -33,7 +45,7 @@ function setSoundIcon(path) {
 }
 
 function loadVideo(index) {
-  if (index < 0 || index >= videoList.length) return;
+  if (!videoList.length || index < 0 || index >= videoList.length) return;
 
   const data = videoList[index];
   video.src = data.src;
@@ -73,7 +85,7 @@ video.addEventListener('pause', () => {
 });
 
 window.addEventListener('wheel', (e) => {
-  if (isSwitching || videoList.length === 0) return;
+  if (isSwitching || !videoList.length) return;
 
   if (e.deltaY > 50 && currentIndex < videoList.length - 1) {
     currentIndex++;
@@ -90,20 +102,6 @@ window.addEventListener('wheel', (e) => {
   }
 });
 
-async function init() {
-  try {
-    const res = await fetch('videos.json');
-    const json = await res.json();
-
-    // Trier par date décroissante
-    videoList = json.sort((a, b) => new Date(b.date) - new Date(a.date));
-
-    loadVideo(currentIndex);
-    video.muted = false;
-    setSoundIcon(soundLoudPath);
-  } catch (err) {
-    console.error("Erreur de chargement des vidéos :", err);
-  }
-}
-
-init();
+fetchVideoList();
+video.muted = false;
+setSoundIcon(soundLoudPath);
