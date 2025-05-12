@@ -27,8 +27,8 @@ jobs:
           username: "${{ secrets.VPS_USER }}"
           key: "${{ secrets.VPS_SSH_KEY }}"
           port: "${{ secrets.VPS_PORT }}"
-          source: mon-site.tar
-          target: ~/mon-site.tar
+          source: "./mon-site.tar"
+          target: "~/"
 
       - name: Load and run image on VPS
         uses: appleboy/ssh-action@v0.1.10
