@@ -19,7 +19,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Build Docker image from docker/
-        run: docker build -t ${{ env.PROJECT_NAME }} ./docker
+        run: docker build -t ${{ env.PROJECT_NAME }} .
 
       - name: Export Docker image as tar
         run: docker save ${{ env.PROJECT_NAME }} -o ${{ env.PROJECT_NAME }}.tar
