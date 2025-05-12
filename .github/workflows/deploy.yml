@@ -1,4 +1,4 @@
-name: Déploiement sur le VPS
+name: Build and Deploy Docker Image to VPS
 
 on:
   push:
@@ -6,8 +6,30 @@ on:
       - main
 
 jobs:
-  deploy:
+  build-and-deploy:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Check
-        run: echo "Workflow ready"
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Build Docker image
+        run: docker build -t mon-site .
+
+      - name: Export Docker image as tar
+        run: docker save mon-site -o mon-site.tar
+
+      - name: Copy image to VPS
+        uses: appleboy/scp-action@v0.1.4
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          source: mon-site.tar
+          target: ~/mon-site.tar
+
+      - name: Load and run image on VPS
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS
