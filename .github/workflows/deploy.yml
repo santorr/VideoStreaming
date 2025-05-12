@@ -18,13 +18,13 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Build Docker image from docker/
+      - name: Build Docker image
         run: docker build -t ${{ env.PROJECT_NAME }} .
 
       - name: Export Docker image as tar
         run: docker save ${{ env.PROJECT_NAME }} -o ${{ env.PROJECT_NAME }}.tar
-        
-      - name: Remove existing .tar file or directory on VPS
+
+      - name: Clean old tar on VPS
         uses: appleboy/ssh-action@v0.1.10
         with:
           host: "${{ secrets.VPS_HOST }}"
@@ -42,7 +42,7 @@ jobs:
           key: "${{ secrets.VPS_SSH_KEY }}"
           port: "${{ secrets.VPS_PORT }}"
           source: "${{ env.PROJECT_NAME }}.tar"
-          target: "${{ env.PROJECT_DIR }}/${{ env.PROJECT_NAME }}.tar"
+          target: "${{ env.PROJECT_DIR }}/"
 
       - name: Load and run image on VPS
         uses: appleboy/ssh-action@v0.1.10
