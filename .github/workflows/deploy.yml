@@ -23,6 +23,16 @@ jobs:
 
       - name: Export Docker image as tar
         run: docker save ${{ env.PROJECT_NAME }} -o ${{ env.PROJECT_NAME }}.tar
+        
+      - name: Remove existing .tar file or directory on VPS
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: "${{ secrets.VPS_HOST }}"
+          username: "${{ secrets.VPS_USER }}"
+          key: "${{ secrets.VPS_SSH_KEY }}"
+          port: "${{ secrets.VPS_PORT }}"
+          script: |
+            rm -rf ${{ env.PROJECT_DIR }}/${{ env.PROJECT_NAME }}.tar
 
       - name: Copy image to VPS
         uses: appleboy/scp-action@v0.1.4
