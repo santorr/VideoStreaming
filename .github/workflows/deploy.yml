@@ -22,14 +22,22 @@ jobs:
       - name: Copy image to VPS
         uses: appleboy/scp-action@v0.1.4
         with:
-          host: ${{ secrets.VPS_HOST }}
-          username: ${{ secrets.VPS_USER }}
-          key: ${{ secrets.VPS_SSH_KEY }}
+          host: "${{ secrets.VPS_HOST }}"
+          username: "${{ secrets.VPS_USER }}"
+          key: "${{ secrets.VPS_SSH_KEY }}"
           source: mon-site.tar
           target: ~/mon-site.tar
 
       - name: Load and run image on VPS
         uses: appleboy/ssh-action@v0.1.10
         with:
-          host: ${{ secrets.VPS_HOST }}
-          username: ${{ secrets.VPS
+          host: "${{ secrets.VPS_HOST }}"
+          username: "${{ secrets.VPS_USER }}"
+          key: "${{ secrets.VPS_SSH_KEY }}"
+          script: |
+            docker load -i ~/mon-site.tar
+            docker stop mon-site || true
+            docker rm mon-site || true
+            docker run -d --name mon-site -p 80:80 \
+              -v /home/ubuntu/videos:/usr/local/apache2/htdocs/videos \
+              mon-site
