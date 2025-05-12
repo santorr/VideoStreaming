@@ -54,8 +54,15 @@ jobs:
           script: |
             cd ${{ env.PROJECT_DIR }}
             docker load -i ${{ env.PROJECT_NAME }}.tar
+
+            # Stop and remove any container using port 80
+            for c in $(docker ps -q --filter "publish=80"); do
+              docker stop $c && docker rm $c;
+            done
+
             docker stop ${{ env.PROJECT_NAME }} || true
             docker rm ${{ env.PROJECT_NAME }} || true
+
             docker run -d --name ${{ env.PROJECT_NAME }} -p 80:80 \
               -v ${{ env.PROJECT_DIR }}/videos:/usr/local/apache2/htdocs/videos \
               ${{ env.PROJECT_NAME }}
