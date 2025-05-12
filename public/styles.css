@@ -19,7 +19,7 @@ body::-webkit-scrollbar {
 }
 
 .video-section {
-  height: 100vh;
+  height: 100dvh;
   scroll-snap-align: start;
   display: flex;
   justify-content: center;
@@ -31,24 +31,34 @@ body::-webkit-scrollbar {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 100%;
-  height: 100%;
+  width: auto;
+  height: auto;
 }
 
 .video-box {
   position: relative;
-  display: inline-block;
   border-radius: 20px;
   overflow: hidden;
+  display: inline-block;
+  background: black;
+  margin: 0 12px;
+  max-height: 95dvh;
+  max-width: calc(100% - 24px);
 }
 
 video {
-  max-height: 95vh;
-  max-width: 100vw;
   display: block;
-  object-fit: contain;
-  cursor: pointer;
-  border-radius: 20px;
+  width: 100%;
+  height: auto;
+  max-height: 95dvh;
+  max-width: 100vw;
+  object-fit: cover;
+  transition: opacity 0.4s ease;
+  opacity: 1;
+}
+
+video.fade-out {
+  opacity: 0;
 }
 
 .video-overlay {
@@ -75,14 +85,14 @@ video {
 
 .video-controls {
   position: absolute;
-  bottom: 5%;
-  right: 20px;
+  top: 20px;           /* ✅ En haut */
+  left: 20px;          /* ✅ À gauche */
   z-index: 10;
   display: flex;
-  flex-direction: column-reverse;
+  flex-direction: row; /* ✅ Horizontale */
   align-items: center;
   gap: 8px;
-  width: 48px;
+  width: auto;         /* ✅ Ne pas fixer une largeur */
 }
 
 .video-controls button {
@@ -95,20 +105,20 @@ video {
   width: 40px;
   height: 40px;
 
-  /* ✅ centrage du contenu SVG */
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .volume-slider {
-  writing-mode: bt-lr;
-  -webkit-appearance: slider-vertical;
-  height: 80px;
+  writing-mode: lr-tb; /* ✅ Horizontale */
+  -webkit-appearance: none;
+  width: 80px;
+  height: 4px;
   display: none;
   cursor: pointer;
-  box-sizing: border-box;
-  background: blue; /* ✅ track blanc */
+  background: white;
+  border-radius: 2px;
 }
 
 .video-controls:hover .volume-slider {
@@ -141,9 +151,18 @@ video {
   opacity: 1;
 }
 
-/* ✅ SVG dans le bouton son */
 .video-controls svg {
   width: 20px;
   height: 20px;
   display: block;
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .video-box.playing .pause-button {
+    display: none !important;
+  }
+}
+
+video.hidden {
+  visibility: hidden;
 }
