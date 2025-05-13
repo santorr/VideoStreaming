@@ -16,21 +16,21 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Checkout the current repository
+      # Clone the repository
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # Build the Docker image locally
+      # Build Docker image locally from Dockerfile
       - name: Build Docker image
         run: docker build -t ${{ env.PROJECT_NAME }} .
 
-      # Save the Docker image to a tar archive
+      # Export Docker image to a tar archive inside the docker folder
       - name: Export Docker image as tar
         run: |
           mkdir -p ${{ env.DOCKER_DIR }}
           docker save ${{ env.PROJECT_NAME }} -o ${{ env.DOCKER_DIR }}/${{ env.PROJECT_NAME }}.tar
 
-      # Remove old tar file from VPS before upload
+      # Clean up the old tar file on the VPS before upload
       - name: Clean old tar on VPS
         uses: appleboy/ssh-action@v0.1.10
         with:
@@ -41,7 +41,7 @@ jobs:
           script: |
             rm -f ${{ env.PROJECT_DIR }}/${{ env.DOCKER_DIR }}/${{ env.PROJECT_NAME }}.tar
 
-      # Upload new tar image to VPS
+      # Upload the new Docker image tarball to the VPS
       - name: Copy image to VPS
         uses: appleboy/scp-action@v0.1.4
         with:
@@ -52,7 +52,7 @@ jobs:
           source: "${{ env.DOCKER_DIR }}/${{ env.PROJECT_NAME }}.tar"
           target: "${{ env.PROJECT_DIR }}/${{ env.DOCKER_DIR }}/"
 
-      # Load image and start container on VPS
+      # Load the image and restart the Docker container on the VPS
       - name: Load and run image on VPS
         uses: appleboy/ssh-action@v0.1.10
         with:
@@ -64,11 +64,11 @@ jobs:
             cd ${{ env.PROJECT_DIR }}/${{ env.DOCKER_DIR }}
             docker load -i ${{ env.PROJECT_NAME }}.tar
 
-            # Stop and remove any existing container
+            # Stop and remove existing container if it exists
             docker stop ${{ env.PROJECT_NAME }} || true
             docker rm ${{ env.PROJECT_NAME }} || true
 
-            # Start new container with mounted video directory
+            # Start new container with volume mount for video files
             docker run -d --name ${{ env.PROJECT_NAME }} -p 80:80 \
               -v ${{ env.PROJECT_DIR }}/videos:/usr/local/apache2/htdocs/videos \
               ${{ env.PROJECT_NAME }}
