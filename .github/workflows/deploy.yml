@@ -9,28 +9,28 @@ on:
 env:
   PROJECT_NAME: website
   PROJECT_DIR: ~/projects/website
-  DOCKER_DIR: docker
+  DOCKER_DIR: docker  # local-only directory for temporary tar file
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
-      # Clone the repository
+      # Checkout the current repository
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # Build Docker image locally from Dockerfile
+      # Build Docker image locally from the Dockerfile
       - name: Build Docker image
         run: docker build -t ${{ env.PROJECT_NAME }} .
 
-      # Export Docker image to a tar archive inside the docker folder
+      # Export Docker image to a tar file in a local build folder
       - name: Export Docker image as tar
         run: |
           mkdir -p ${{ env.DOCKER_DIR }}
           docker save ${{ env.PROJECT_NAME }} -o ${{ env.DOCKER_DIR }}/${{ env.PROJECT_NAME }}.tar
 
-      # Clean up the old tar file on the VPS before upload
+      # Remove previous tar file from the VPS if it exists
       - name: Clean old tar on VPS
         uses: appleboy/ssh-action@v0.1.10
         with:
@@ -39,9 +39,9 @@ jobs:
           key: "${{ secrets.VPS_SSH_KEY }}"
           port: "${{ secrets.VPS_PORT }}"
           script: |
-            rm -rf ${{ env.PROJECT_DIR }}/${{ env.DOCKER_DIR }}/${{ env.PROJECT_NAME }}.tar
-      
-      # Upload the new Docker image tarball to the VPS
+            rm -f ${{ env.PROJECT_DIR }}/${{ env.PROJECT_NAME }}.tar
+
+      # Transfer new tar image to the root project folder on the VPS
       - name: Copy image to VPS
         uses: appleboy/scp-action@v0.1.4
         with:
@@ -52,7 +52,7 @@ jobs:
           source: "${{ env.DOCKER_DIR }}/${{ env.PROJECT_NAME }}.tar"
           target: "${{ env.PROJECT_DIR }}/"
 
-      # Load the image and restart the Docker container on the VPS
+      # Load Docker image on the VPS and restart the container
       - name: Load and run image on VPS
         uses: appleboy/ssh-action@v0.1.10
         with:
@@ -61,12 +61,14 @@ jobs:
           key: "${{ secrets.VPS_SSH_KEY }}"
           port: "${{ secrets.VPS_PORT }}"
           script: |
-            cd ${{ env.PROJECT_DIR }}/${{ env.DOCKER_DIR }}
+            cd ${{ env.PROJECT_DIR }}
             docker load -i ${{ env.PROJECT_NAME }}.tar
 
+            # Stop and remove existing container if it exists
             docker stop ${{ env.PROJECT_NAME }} || true
             docker rm ${{ env.PROJECT_NAME }} || true
 
+            # Start the container and mount the videos folder
             docker run -d --name ${{ env.PROJECT_NAME }} -p 80:80 \
               -v ${{ env.PROJECT_DIR }}/videos:/usr/local/apache2/htdocs/videos \
               ${{ env.PROJECT_NAME }}
