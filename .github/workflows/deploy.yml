@@ -64,12 +64,9 @@ jobs:
             cd ${{ env.PROJECT_DIR }}/${{ env.DOCKER_DIR }}
             docker load -i ${{ env.PROJECT_NAME }}.tar
 
-          # Stop and remove existing container if it exists
-            echo "🧹 Stopping and removing existing container (if any)..."
             docker stop ${{ env.PROJECT_NAME }} || true
             docker rm ${{ env.PROJECT_NAME }} || true
 
-          # Start new container with volume mount for video files
             docker run -d --name ${{ env.PROJECT_NAME }} -p 80:80 \
               -v ${{ env.PROJECT_DIR }}/videos:/usr/local/apache2/htdocs/videos \
               ${{ env.PROJECT_NAME }}
