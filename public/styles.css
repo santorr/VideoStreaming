@@ -1,3 +1,4 @@
+/* Global reset */
 body, html {
   margin: 0;
   padding: 0;
@@ -18,6 +19,7 @@ body::-webkit-scrollbar {
   width: 100%;
 }
 
+/* Fullscreen scrollable section */
 .video-section {
   height: 100dvh;
   scroll-snap-align: start;
@@ -27,6 +29,7 @@ body::-webkit-scrollbar {
   background: white;
 }
 
+/* Centered wrapper for video container */
 .video-wrapper {
   display: flex;
   justify-content: center;
@@ -35,6 +38,7 @@ body::-webkit-scrollbar {
   height: auto;
 }
 
+/* Main video container */
 .video-box {
   position: relative;
   border-radius: 20px;
@@ -46,6 +50,7 @@ body::-webkit-scrollbar {
   max-width: calc(100% - 24px);
 }
 
+/* Video element */
 video {
   display: block;
   width: 100%;
@@ -57,10 +62,17 @@ video {
   opacity: 1;
 }
 
+/* Fading transition */
 video.fade-out {
   opacity: 0;
 }
 
+/* Hide while switching */
+video.hidden {
+  visibility: hidden;
+}
+
+/* Overlay: video title + description */
 .video-overlay {
   position: absolute;
   left: 20px;
@@ -83,18 +95,20 @@ video.fade-out {
   opacity: 0.9;
 }
 
+/* Volume & sound controls */
 .video-controls {
   position: absolute;
-  top: 20px;           /* ✅ En haut */
-  left: 20px;          /* ✅ À gauche */
+  top: 20px;
+  left: 20px;
   z-index: 10;
   display: flex;
-  flex-direction: row; /* ✅ Horizontale */
+  flex-direction: row;
   align-items: center;
   gap: 8px;
-  width: auto;         /* ✅ Ne pas fixer une largeur */
+  width: auto;
 }
 
+/* Sound button */
 .video-controls button {
   background: rgba(0, 0, 0, 0.6);
   border: none;
@@ -104,14 +118,14 @@ video.fade-out {
   backdrop-filter: blur(4px);
   width: 40px;
   height: 40px;
-
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
+/* Volume bar (hidden by default) */
 .volume-slider {
-  writing-mode: lr-tb; /* ✅ Horizontale */
+  writing-mode: lr-tb;
   -webkit-appearance: none;
   width: 80px;
   height: 4px;
@@ -121,10 +135,12 @@ video.fade-out {
   border-radius: 2px;
 }
 
+/* Show volume bar on hover */
 .video-controls:hover .volume-slider {
   display: block;
 }
 
+/* Pause icon in center */
 .pause-button {
   position: absolute;
   top: 50%;
@@ -144,25 +160,25 @@ video.fade-out {
   height: 100%;
 }
 
+/* Fade pause icon when playing */
 .video-box.playing .pause-button {
   opacity: 0;
 }
+
 .video-box.playing:hover .pause-button {
   opacity: 1;
 }
 
+/* SVG inside controls */
 .video-controls svg {
   width: 20px;
   height: 20px;
   display: block;
 }
 
+/* Disable pause icon entirely on mobile */
 @media (hover: none) and (pointer: coarse) {
   .video-box.playing .pause-button {
     display: none !important;
   }
-}
-
-video.hidden {
-  visibility: hidden;
 }

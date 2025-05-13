@@ -16,17 +16,21 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # Checkout the current repository
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      # Build the Docker image locally
       - name: Build Docker image
         run: docker build -t ${{ env.PROJECT_NAME }} .
 
+      # Save the Docker image to a tar archive
       - name: Export Docker image as tar
         run: |
           mkdir -p ${{ env.DOCKER_DIR }}
           docker save ${{ env.PROJECT_NAME }} -o ${{ env.DOCKER_DIR }}/${{ env.PROJECT_NAME }}.tar
 
+      # Remove old tar file from VPS before upload
       - name: Clean old tar on VPS
         uses: appleboy/ssh-action@v0.1.10
         with:
@@ -35,8 +39,9 @@ jobs:
           key: "${{ secrets.VPS_SSH_KEY }}"
           port: "${{ secrets.VPS_PORT }}"
           script: |
-            rm -rf ${{ env.PROJECT_DIR }}/${{ env.DOCKER_DIR }}/${{ env.PROJECT_NAME }}.tar
+            rm -f ${{ env.PROJECT_DIR }}/${{ env.DOCKER_DIR }}/${{ env.PROJECT_NAME }}.tar
 
+      # Upload new tar image to VPS
       - name: Copy image to VPS
         uses: appleboy/scp-action@v0.1.4
         with:
@@ -45,8 +50,9 @@ jobs:
           key: "${{ secrets.VPS_SSH_KEY }}"
           port: "${{ secrets.VPS_PORT }}"
           source: "${{ env.DOCKER_DIR }}/${{ env.PROJECT_NAME }}.tar"
-          target: "${{ env.PROJECT_DIR }}/"
+          target: "${{ env.PROJECT_DIR }}/${{ env.DOCKER_DIR }}/"
 
+      # Load image and start container on VPS
       - name: Load and run image on VPS
         uses: appleboy/ssh-action@v0.1.10
         with:
@@ -58,13 +64,11 @@ jobs:
             cd ${{ env.PROJECT_DIR }}/${{ env.DOCKER_DIR }}
             docker load -i ${{ env.PROJECT_NAME }}.tar
 
-            echo "🧹 Stopping and removing existing container (if any)..."
+            # Stop and remove any existing container
             docker stop ${{ env.PROJECT_NAME }} || true
             docker rm ${{ env.PROJECT_NAME }} || true
 
-            echo "🚀 Running new container..."
+            # Start new container with mounted video directory
             docker run -d --name ${{ env.PROJECT_NAME }} -p 80:80 \
               -v ${{ env.PROJECT_DIR }}/videos:/usr/local/apache2/htdocs/videos \
               ${{ env.PROJECT_NAME }}
-
-            echo "✅ Deployed successfully"

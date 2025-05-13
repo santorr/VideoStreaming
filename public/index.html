@@ -3,21 +3,30 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Vidéo Streaming</title>
+  <title>I don't wanna be french</title>
+
+  <!-- Style & HLS.js for streaming -->
   <link rel="stylesheet" href="styles.css" />
-  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script> <!-- Ajout -->
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 </head>
 <body>
   <div class="container">
     <section class="video-section">
       <div class="video-wrapper">
         <div class="video-box">
-          <video id="video" autoplay muted playsinline></video> <!-- Ajout id -->
+          <!-- Video player (muted autoplay for modern browsers) -->
+          <video id="video" autoplay muted playsinline></video>
+
+          <!-- Play/Pause Button -->
           <div class="pause-button"></div>
+
+          <!-- Overlay Info -->
           <div class="video-overlay">
-            <h2>Titre</h2>
+            <h2>Title</h2>
             <p>Description</p>
           </div>
+
+          <!-- Sound Controls -->
           <div class="video-controls">
             <button class="sound-toggle"></button>
             <input type="range" class="volume-slider" min="0" max="1" step="0.01" />
@@ -27,6 +36,7 @@
     </section>
   </div>
 
+  <!-- Main JS -->
   <script src="script.js"></script>
 </body>
 </html>
