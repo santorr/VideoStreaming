@@ -6,6 +6,3 @@ COPY public/ /usr/local/apache2/htdocs/
 
 # Enable .htaccess support by allowing override rules in the Apache config
 RUN sed -i 's|<Directory "/usr/local/apache2/htdocs">|<Directory "/usr/local/apache2/htdocs">\n    AllowOverride All|' /usr/local/apache2/conf/httpd.conf
-
-# Expose port 80 for HTTP access
-EXPOSE 80
