@@ -66,3 +66,23 @@ jobs:
             docker run -d --name ${{ env.PROJECT_NAME }} -p 80:80 \
               -v ${{ env.PROJECT_DIR }}/videos:/usr/local/apache2/htdocs/videos \
               ${{ env.PROJECT_NAME }}
+
+      - name: Configure Apache for HLS playback
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: "${{ secrets.VPS_HOST }}"
+          username: "${{ secrets.VPS_USER }}"
+          key: "${{ secrets.VPS_SSH_KEY }}"
+          port: "${{ secrets.VPS_PORT }}"
+          script: |
+            docker exec ${{ env.PROJECT_NAME }} bash -c '
+              echo "🔧 Creating .htaccess in /videos"
+              echo "AddType application/vnd.apple.mpegurl .m3u8" > /usr/local/apache2/htdocs/videos/.htaccess
+              echo "AddType video/mp2t .ts" >> /usr/local/apache2/htdocs/videos/.htaccess
+
+              echo "🔍 Ensuring AllowOverride is enabled"
+              sed -i "s|<Directory \"/usr/local/apache2/htdocs\">|<Directory \"/usr/local/apache2/htdocs\">\n    AllowOverride All|" /usr/local/apache2/conf/httpd.conf
+
+              echo "♻️ Restarting Apache"
+              apachectl restart
+            '
