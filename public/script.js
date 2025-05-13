@@ -37,21 +37,30 @@ function loadVideo(index) {
   if (index < 0 || index >= videoList.length) return;
 
   const data = videoList[index];
-  video.classList.add('fade-out');       // ↓ transition douce
-  video.classList.add('hidden');         // 🔒 cache la vidéo
+  const src = data.src;
+
+  video.classList.add('fade-out');
+  video.classList.add('hidden');
 
   setTimeout(() => {
-    video.src = data.src;
     titleEl.textContent = data.title;
     descEl.textContent = data.description;
 
+    if (src.endsWith('.m3u8') && Hls.isSupported()) {
+      const hls = new Hls();
+      hls.loadSource(src);
+      hls.attachMedia(video);
+    } else {
+      video.src = src;
+    }
+
     video.onloadeddata = () => {
-      video.classList.remove('hidden');  // ✅ ré-affiche la vidéo
+      video.classList.remove('hidden');
       video.classList.remove('fade-out');
       video.play();
       setSoundIcon(video.muted ? soundOffPath : soundLoudPath);
     };
-  }, 300); // correspond au CSS `transition: opacity`
+  }, 300);
 }
 
 btn.addEventListener('click', () => {
