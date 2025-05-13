@@ -39,8 +39,8 @@ jobs:
           key: "${{ secrets.VPS_SSH_KEY }}"
           port: "${{ secrets.VPS_PORT }}"
           script: |
-            rm -f ${{ env.PROJECT_DIR }}/${{ env.DOCKER_DIR }}/${{ env.PROJECT_NAME }}.tar
-
+            rm -rf ${{ env.PROJECT_DIR }}/${{ env.DOCKER_DIR }}/${{ env.PROJECT_NAME }}.tar
+      
       # Upload the new Docker image tarball to the VPS
       - name: Copy image to VPS
         uses: appleboy/scp-action@v0.1.4
@@ -50,7 +50,7 @@ jobs:
           key: "${{ secrets.VPS_SSH_KEY }}"
           port: "${{ secrets.VPS_PORT }}"
           source: "${{ env.DOCKER_DIR }}/${{ env.PROJECT_NAME }}.tar"
-          target: "${{ env.PROJECT_DIR }}/${{ env.DOCKER_DIR }}/"
+          target: "${{ env.PROJECT_DIR }}/"
 
       # Load the image and restart the Docker container on the VPS
       - name: Load and run image on VPS
@@ -64,11 +64,12 @@ jobs:
             cd ${{ env.PROJECT_DIR }}/${{ env.DOCKER_DIR }}
             docker load -i ${{ env.PROJECT_NAME }}.tar
 
-            # Stop and remove existing container if it exists
+          # Stop and remove existing container if it exists
+            echo "🧹 Stopping and removing existing container (if any)..."
             docker stop ${{ env.PROJECT_NAME }} || true
             docker rm ${{ env.PROJECT_NAME }} || true
 
-            # Start new container with volume mount for video files
+          # Start new container with volume mount for video files
             docker run -d --name ${{ env.PROJECT_NAME }} -p 80:80 \
               -v ${{ env.PROJECT_DIR }}/videos:/usr/local/apache2/htdocs/videos \
               ${{ env.PROJECT_NAME }}
