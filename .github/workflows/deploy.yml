@@ -9,6 +9,7 @@ on:
 env:
   PROJECT_NAME: website
   PROJECT_DIR: ~/projects/website
+  DOCKER_DIR: docker
 
 jobs:
   build-and-deploy:
@@ -23,8 +24,8 @@ jobs:
 
       - name: Export Docker image as tar
         run: |
-          mkdir -p docker
-          docker save ${{ env.PROJECT_NAME }} -o docker/${{ env.PROJECT_NAME }}.tar
+          mkdir -p ${{ env.DOCKER_DIR }}
+          docker save ${{ env.PROJECT_NAME }} -o ${{ env.DOCKER_DIR }}/${{ env.PROJECT_NAME }}.tar
 
       - name: Clean old tar on VPS
         uses: appleboy/ssh-action@v0.1.10
@@ -34,7 +35,7 @@ jobs:
           key: "${{ secrets.VPS_SSH_KEY }}"
           port: "${{ secrets.VPS_PORT }}"
           script: |
-            rm -rf ${{ env.PROJECT_DIR }}/${{ env.PROJECT_NAME }}.tar
+            rm -rf ${{ env.PROJECT_DIR }}/${{ env.DOCKER_DIR }}/${{ env.PROJECT_NAME }}.tar
 
       - name: Copy image to VPS
         uses: appleboy/scp-action@v0.1.4
@@ -43,8 +44,8 @@ jobs:
           username: "${{ secrets.VPS_USER }}"
           key: "${{ secrets.VPS_SSH_KEY }}"
           port: "${{ secrets.VPS_PORT }}"
-          source: "docker/${{ env.PROJECT_NAME }}.tar"
-          target: "${{ env.PROJECT_DIR }}/docker/"
+          source: "${{ env.DOCKER_DIR }}/${{ env.PROJECT_NAME }}.tar"
+          target: "${{ env.PROJECT_DIR }}/${{ env.DOCKER_DIR }}/"
 
       - name: Load and run image on VPS
         uses: appleboy/ssh-action@v0.1.10
@@ -54,9 +55,7 @@ jobs:
           key: "${{ secrets.VPS_SSH_KEY }}"
           port: "${{ secrets.VPS_PORT }}"
           script: |
-            cd ${{ env.PROJECT_DIR }}
-
-            cd ${{ env.PROJECT_DIR }}/docker
+            cd ${{ env.PROJECT_DIR }}/${{ env.DOCKER_DIR }}
             docker load -i ${{ env.PROJECT_NAME }}.tar
 
             echo "🧹 Stopping and removing existing container (if any)..."
