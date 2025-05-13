@@ -53,16 +53,17 @@ jobs:
           port: "${{ secrets.VPS_PORT }}"
           script: |
             cd ${{ env.PROJECT_DIR }}
+
+            echo "📦 Loading Docker image..."
             docker load -i ${{ env.PROJECT_NAME }}.tar
 
-            # Stop and remove any container using port 80
-            for c in $(docker ps -q --filter "publish=80"); do
-              docker stop $c && docker rm $c;
-            done
-
+            echo "🧹 Stopping and removing existing container (if any)..."
             docker stop ${{ env.PROJECT_NAME }} || true
             docker rm ${{ env.PROJECT_NAME }} || true
 
+            echo "🚀 Running new container..."
             docker run -d --name ${{ env.PROJECT_NAME }} -p 80:80 \
               -v ${{ env.PROJECT_DIR }}/videos:/usr/local/apache2/htdocs/videos \
               ${{ env.PROJECT_NAME }}
+
+            echo "✅ Deployed successfully"
