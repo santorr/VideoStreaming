@@ -79,7 +79,7 @@ video.addEventListener('touchend', (e) => {
 
 // === Init Video Playback with HLS Support ===
 function init() {
-  const src = "/videos/video1/video1.m3u8"; // <- Change to your actual path
+  const src = "/videos/video1.m3u8";
   titleEl.textContent = "Test HLS Video";
   descEl.textContent = "This is streamed via .m3u8";
 
