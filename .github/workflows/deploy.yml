@@ -1,5 +1,7 @@
 name: Build and Deploy Docker Image to VPS
 
+runs-on: self-hosted
+
 on:
   push:
     branches:
@@ -16,7 +18,6 @@ jobs:
     runs-on: ubuntu-latests
 
     steps:
-    # Test
       - name: Checkout repository
         uses: actions/checkout@v3
 
