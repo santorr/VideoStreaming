@@ -88,8 +88,7 @@ video.hidden {
 .top-row,
 .bottom-row {
   display: flex;
-  justify-content: center;
-  align-items: center;
+  justify-content: flex-start;
 }
 
 .center-overlay {
