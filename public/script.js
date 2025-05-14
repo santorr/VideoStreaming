@@ -29,16 +29,24 @@ function setSoundIcon(path) {
   `;
 }
 
-btn.addEventListener('click', () => {
-  video.muted = !video.muted;
-  setSoundIcon(video.muted ? soundOffPath : soundLoudPath);
+volumeSlider.addEventListener('input', (e) => {
+  const value = parseFloat(e.target.value);
+  video.volume = value;
+  video.muted = value === 0;
+  updateVolumeIcon(volumeSlider, value);
 });
 
-volumeSlider.addEventListener('input', (e) => {
-  video.volume = e.target.value;
-  video.muted = (video.volume === 0);
-  setSoundIcon(video.muted ? soundOffPath : soundLoudPath);
-});
+function updateVolumeIcon(slider, volume) {
+  if (volume === 0) {
+    slider.setAttribute("data-volume", "muted");
+  } else if (volume < 0.3) {
+    slider.setAttribute("data-volume", "low");
+  } else if (volume < 0.6) {
+    slider.setAttribute("data-volume", "medium");
+  } else {
+    slider.setAttribute("data-volume", "high");
+  }
+}
 
 video.addEventListener('click', () => {
   video.paused ? video.play() : video.pause();
