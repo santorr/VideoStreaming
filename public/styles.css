@@ -88,7 +88,7 @@ video.hidden {
 .top-row,
 .bottom-row {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
 }
 
@@ -99,16 +99,19 @@ video.hidden {
   flex: 1;
 }
 
+/* Centrage du slider */
 .video-controls {
-  pointer-events: auto;
   display: flex;
-  align-items: center;
+  justify-content: center;
+  width: 100%;
+  pointer-events: auto;
 }
 
 /* Volume slider */
 .volume-slider {
   width: 160px;
   height: 4px;
+  margin: 0 auto;
   -webkit-appearance: none;
   background: white;
   border-radius: 2px;
@@ -117,12 +120,13 @@ video.hidden {
   transition: opacity 0.3s ease;
 }
 
+/* Affichage du slider au survol */
 .video-box:hover .volume-slider {
   opacity: 1;
   pointer-events: auto;
 }
 
-/* Slider thumb */
+/* Slider thumb (bouton) */
 .volume-slider::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
@@ -137,7 +141,7 @@ video.hidden {
   border: none;
 }
 
-/* Thumb icons by volume level */
+/* Icônes dynamiques par volume */
 .volume-slider.volume-muted::-webkit-slider-thumb {
   background-image: url('assets/sound-mute.svg');
 }
@@ -160,6 +164,7 @@ video.hidden {
   color: white;
   text-shadow: 0 0 8px black;
   text-align: left;
+  padding: 0 16px 16px 16px;
 }
 
 .video-overlay h2 {
