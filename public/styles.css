@@ -125,7 +125,7 @@ video.hidden {
 
 /* Volume bar (hidden by default) */
 .volume-slider {
-  width: 100%;
+  width: 50%;
   height: 4px;
   -webkit-appearance: none;
   background: white;
