@@ -162,9 +162,8 @@ video.hidden {
 .video-overlay {
   pointer-events: none;
   color: white;
-  text-shadow: 0 0 8px black;
   text-align: left;
-  padding: 0 16px 16px 16px;
+  padding: 16px 16px 16px 16px;
 }
 
 .video-overlay h2 {
