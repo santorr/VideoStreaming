@@ -14,28 +14,44 @@
     <section class="video-section">
       <div class="video-wrapper">
         <div class="video-box">
-          <!-- Video player (muted autoplay for modern browsers) -->
           <video id="video" autoplay muted playsinline></video>
 
-          <!-- Play/Pause Button -->
-          <div class="pause-button"></div>
+          <!-- UI Overlay -->
+          <div class="video-ui">
+            <!-- Haut -->
+            <div class="top-row">
+              <div></div>
+              <div class="video-controls">
+                <input
+                  type="range"
+                  class="volume-slider"
+                  data-volume="low"
+                  min="0"
+                  max="1"
+                  step="0.01"
+                />
+              </div>
+            </div>
 
-          <!-- Overlay Info -->
-          <div class="video-overlay">
-            <h2>Title</h2>
-            <p>Description</p>
-          </div>
+            <!-- Centre -->
+            <div class="center-overlay">
+              <div class="pause-button"></div>
+            </div>
 
-          <!-- Sound Controls -->
-          <div class="video-controls">
-            <input type="range" class="volume-slider" data-volume="low" min="0" max="1" step="0.01" />
+            <!-- Bas -->
+            <div class="bottom-row">
+              <div class="video-overlay">
+                <h2>Vidéo HLS test</h2>
+                <p>Lecture d’un flux .m3u8 avec HLS.js</p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </section>
   </div>
 
-  <!-- Main JS -->
+  <!-- Script -->
   <script src="script.js?v=1"></script>
 </body>
 </html>

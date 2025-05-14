@@ -72,15 +72,94 @@ video.hidden {
   visibility: hidden;
 }
 
-/* Overlay: video title + description */
-.video-overlay {
+/* ========== UI Layout ========== */
+.video-ui {
   position: absolute;
-  left: 20px;
-  bottom: 6%;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 16px;
+  box-sizing: border-box;
+  pointer-events: none;
   z-index: 10;
+}
+
+.top-row,
+.bottom-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.center-overlay {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+}
+
+.video-controls {
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+}
+
+/* Volume slider */
+.volume-slider {
+  width: 160px;
+  height: 4px;
+  -webkit-appearance: none;
+  background: white;
+  border-radius: 2px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.video-box:hover .volume-slider {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Slider thumb */
+.volume-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: white;
+  background-size: 16px 16px;
+  background-position: center;
+  background-repeat: no-repeat;
+  cursor: pointer;
+  border: none;
+}
+
+/* Thumb icons by volume level */
+.volume-slider.volume-muted::-webkit-slider-thumb {
+  background-image: url('assets/sound-mute.svg');
+}
+
+.volume-slider.volume-low::-webkit-slider-thumb {
+  background-image: url('assets/sound-low.svg');
+}
+
+.volume-slider.volume-medium::-webkit-slider-thumb {
+  background-image: url('assets/sound-medium.svg');
+}
+
+.volume-slider.volume-high::-webkit-slider-thumb {
+  background-image: url('assets/sound-high.svg');
+}
+
+/* Overlay infos (titre + description) */
+.video-overlay {
+  pointer-events: none;
   color: white;
   text-shadow: 0 0 8px black;
-  pointer-events: none;
+  text-align: left;
 }
 
 .video-overlay h2 {
@@ -95,116 +174,35 @@ video.hidden {
   opacity: 0.9;
 }
 
-/* Volume & sound controls */
-.video-controls {
-  position: absolute;
-  top: 12px;
-  left: 0;
-  right: 0;
-  z-index: 10;
-  padding: 12px 16px;
-  display: flex;
-  justify-content: center;
-  pointer-events: none;
-}
-
-/* Sound button */
-.video-controls button {
+/* Pause icon in center */
+.pause-button {
+  width: 64px;
+  height: 64px;
   background: rgba(0, 0, 0, 0.6);
-  border: none;
-  padding: 10px;
   border-radius: 50%;
-  cursor: pointer;
-  backdrop-filter: blur(4px);
-  width: 40px;
-  height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-/* Volume bar (hidden by default) */
-.volume-slider {
-  width: 50%;
-  height: 4px;
-  -webkit-appearance: none;
-  background: white;
-  border-radius: 2px;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.3s ease;
-}
-
-.volume-slider::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  background-color: #ffffff;
-  background-size: 16px 16px;
-  background-position: center;
-  background-repeat: no-repeat;
-  cursor: pointer;
-  border: none;
-}
-
-.volume-slider[data-volume="muted"]::-webkit-slider-thumb {
-  background-image: url('assets/sound-mute.svg');
-}
-
-.volume-slider[data-volume="low"]::-webkit-slider-thumb {
-  background-image: url('assets/sound-low.svg');
-}
-
-.volume-slider[data-volume="medium"]::-webkit-slider-thumb {
-  background-image: url('assets/sound-medium.svg');
-}
-
-.volume-slider[data-volume="high"]::-webkit-slider-thumb {
-  background-image: url('assets/sound-high.svg');
-}
-
-/* Show volume bar on hover */
-.video-box:hover .volume-slider {
-  opacity: 1;
-  pointer-events: auto;
-}
-
-/* Pause icon in center */
-.pause-button {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 64px;
-  height: 64px;
-  transform: translate(-50%, -50%);
   color: white;
-  opacity: 1;
   pointer-events: none;
-  transition: opacity 0.2s ease;
-  z-index: 10;
+  transition: opacity 0.2s ease, transform 0.2s ease;
 }
 
 .pause-icon {
-  width: 100%;
-  height: 100%;
+  width: 28px;
+  height: 28px;
+  fill: white;
 }
 
 /* Fade pause icon when playing */
 .video-box.playing .pause-button {
   opacity: 0;
+  transform: scale(0.9);
 }
 
 .video-box.playing:hover .pause-button {
   opacity: 1;
-}
-
-/* SVG inside controls */
-.video-controls svg {
-  width: 20px;
-  height: 20px;
-  display: block;
+  transform: scale(1);
 }
 
 /* Disable pause icon entirely on mobile */
