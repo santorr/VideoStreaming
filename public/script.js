@@ -72,7 +72,7 @@ video.addEventListener('touchend', (e) => {
 
 // === Initialization on DOM load ===
 function init() {
-  const src = "/videos/9767b87c-6de7-40d8-8bc7-df45fd69dee2/output.m3u8";
+  const src = "/videos/53db36b3-37a8-4625-9ae3-9f6a2528d407/output.m3u8";
 
   // Set overlay text content
   titleEl.textContent = "Vidéo HLS test 🎈😫🙈";
