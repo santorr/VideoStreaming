@@ -71,9 +71,10 @@ video.addEventListener('touchend', (e) => {
 
 // Initialisation
 function init() {
-  const src = "/videos/video1.m3u8";
+  const src = "http://92.222.23.136/videos/video1.mp4";
+  // const src = "/videos/video1.m3u8";
   titleEl.textContent = "Vidéo HLS test";
-  descEl.textContent = "Lecture d’un flux .m3u8 avec HLS.js";
+  descEl.textContent = "Lecture d’un flux .m3u8 avec HLS.js hdkh lkhg jklh hgdslFUDl lu flsdfdsluf flusdyflsdyf dslufysdf sdlkfusdl hklhkjhsadh lkjdhsaj jdlkasdf";
 
   if (src.endsWith('.m3u8') && Hls.isSupported()) {
     const hls = new Hls();
