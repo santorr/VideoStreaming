@@ -1,4 +1,4 @@
-/* Global reset */
+/* === Reset and base layout === */
 body, html {
   margin: 0;
   padding: 0;
@@ -8,18 +8,20 @@ body, html {
   scroll-snap-type: y mandatory;
   scroll-behavior: smooth;
   overflow: hidden;
-  scrollbar-width: none;
+  scrollbar-width: none; /* Firefox: hide scrollbar */
 }
 
+/* Chrome/Safari: hide scrollbar */
 body::-webkit-scrollbar {
   display: none;
 }
 
+/* Main container */
 .container {
   width: 100%;
 }
 
-/* Section pleine hauteur */
+/* === Fullscreen video section === */
 .video-section {
   height: 100dvh;
   scroll-snap-align: start;
@@ -29,14 +31,14 @@ body::-webkit-scrollbar {
   background: white;
 }
 
-/* Vidéo centrée */
+/* Wrapper for centering the video */
 .video-wrapper {
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-/* Conteneur de la vidéo avec coins arrondis */
+/* Video box with rounded corners and constrained dimensions */
 .video-box {
   position: relative;
   border-radius: 20px;
@@ -47,7 +49,7 @@ body::-webkit-scrollbar {
   aspect-ratio: 9 / 16;
 }
 
-/* Élément vidéo */
+/* === Video element === */
 video {
   display: block;
   width: 100%;
@@ -56,7 +58,7 @@ video {
   transition: opacity 0.4s ease;
 }
 
-/* Overlay UI complet */
+/* === UI Overlay Container === */
 .video-ui {
   position: absolute;
   inset: 0;
@@ -69,7 +71,7 @@ video {
   z-index: 10;
 }
 
-/* Ligne du haut */
+/* === UI Layout: Top / Center / Bottom zones === */
 .top-row,
 .center-overlay,
 .bottom-row {
@@ -79,17 +81,18 @@ video {
   align-items: center;
 }
 
+/* Top row with minimal height for volume control */
 .top-row {
-  height: 24px; /* ou plus selon le design */
+  height: 24px;
 }
 
-/* Ligne du bas alignée à gauche */
+/* Bottom row: align left and bottom */
 .bottom-row {
   justify-content: flex-start;
   align-items: flex-end;
 }
 
-/* Conteneur du slider */
+/* === Volume Control === */
 .video-controls {
   width: 100%;
   max-width: 100%;
@@ -99,7 +102,7 @@ video {
   box-sizing: border-box;
 }
 
-/* Slider volume */
+/* Volume slider styling */
 .volume-slider {
   width: 100%;
   max-width: 160px;
@@ -114,13 +117,13 @@ video {
   transition: opacity 0.3s ease;
 }
 
-/* Affichage au hover */
+/* Show volume slider on hover */
 .video-box:hover .volume-slider {
   opacity: 1;
   pointer-events: auto;
 }
 
-/* Bouton du slider */
+/* Volume slider thumb styling */
 .volume-slider::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
@@ -135,7 +138,7 @@ video {
   cursor: pointer;
 }
 
-/* Icônes dynamiques */
+/* Dynamic icons for different volume levels */
 .volume-slider.volume-muted::-webkit-slider-thumb {
   background-image: url('assets/sound-mute.svg');
 }
@@ -149,7 +152,7 @@ video {
   background-image: url('assets/sound-high.svg');
 }
 
-/* Bouton pause/play */
+/* === Play/Pause button (center icon) === */
 .pause-button {
   width: 96px;
   height: 96px;
@@ -161,23 +164,26 @@ video {
   transition: opacity 0.2s ease, transform 0.2s ease;
 }
 
+/* SVG icon inside the pause button */
 .pause-icon {
   width: 48px;
   height: 48px;
   fill: white;
 }
 
-/* Masque l'icône quand vidéo en lecture */
+/* Fade out the pause button when video is playing */
 .video-box.playing .pause-button {
   opacity: 0;
   transform: scale(0.9);
 }
+
+/* Show icon on hover */
 .video-box.playing:hover .pause-button {
   opacity: 1;
   transform: scale(1);
 }
 
-/* Texte descriptif */
+/* === Text overlay (title + description) === */
 .video-overlay {
   background: none;
   padding: 0;
@@ -201,7 +207,7 @@ video {
   opacity: 0.9;
 }
 
-/* Cacher l’icône pause sur mobile */
+/* === Mobile support: hide central button on touch devices === */
 @media (hover: none) and (pointer: coarse) {
   .video-box.playing .pause-button {
     display: none !important;

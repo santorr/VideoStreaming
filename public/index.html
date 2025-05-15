@@ -2,13 +2,24 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8" />
+
+  <!-- Modern SVG favicon -->
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <!-- Fallback favicon for legacy browsers -->
   <link rel="alternate icon" href="assets/favicon.ico" type="image/x-icon">
+
+  <!-- Responsive meta tag for mobile devices -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
   <title>I don't wanna be french</title>
-  <!-- Style & HLS.js for streaming -->
+
+  <!-- Google Fonts: Poppins -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+
+  <!-- Main stylesheet -->
   <link rel="stylesheet" href="styles.css" />
+
+  <!-- HLS.js for .m3u8 video stream support -->
   <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 </head>
 <body>
@@ -16,14 +27,17 @@
     <section class="video-section">
       <div class="video-wrapper">
         <div class="video-box">
+          <!-- HTML5 video element (autoplaying and muted for autoplay compliance) -->
           <video id="video" autoplay muted playsinline></video>
 
-          <!-- UI Overlay -->
+          <!-- UI overlay elements positioned over the video -->
           <div class="video-ui">
-            <!-- Haut -->
+
+            <!-- Top row: volume controls or other top-aligned UI -->
             <div class="top-row">
-              <div></div>
+              <div></div> <!-- Optional left placeholder -->
               <div class="video-controls">
+                <!-- Volume slider -->
                 <input
                   type="range"
                   class="volume-slider"
@@ -35,12 +49,12 @@
               </div>
             </div>
 
-            <!-- Centre -->
+            <!-- Center row: play/pause button -->
             <div class="center-overlay">
               <div class="pause-button"></div>
             </div>
 
-            <!-- Bas -->
+            <!-- Bottom row: title and description -->
             <div class="bottom-row">
               <div class="video-overlay">
                 <h2>Vidéo HLS test</h2>
@@ -53,7 +67,7 @@
     </section>
   </div>
 
-  <!-- Script -->
+  <!-- Main JavaScript controlling video and UI behavior -->
   <script src="script.js?v=1"></script>
 </body>
 </html>
