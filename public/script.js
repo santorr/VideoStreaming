@@ -75,7 +75,7 @@ function init() {
   const src = "/videos/video1.m3u8";
 
   // Set overlay text content
-  titleEl.textContent = "Vidéo HLS test";
+  titleEl.textContent = "Vidéo HLS test 🎈😫🙈";
   descEl.textContent = "Lecture d’un flux .m3u8 avec HLS.js hdkh lkhg jklh hgdslFUDl lu flsdfdsluf flusdyflsdyf dslufysdf sdlkfusdl hklhkjhsadh lkjdhsaj jdlkasdf";
 
   // If HLS is supported, load the .m3u8 source via Hls.js
