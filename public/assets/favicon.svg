@@ -1,11 +1,4 @@
-<?xml version="1.0" standalone="no"?>
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 20010904//EN"
- "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
-<svg version="1.0" xmlns="http://www.w3.org/2000/svg"
- width="2048.000000pt" height="2048.000000pt" viewBox="0 0 2048.000000 2048.000000"
- preserveAspectRatio="xMidYMid meet">
-
-<g transform="translate(0.000000,2048.000000) scale(0.100000,-0.100000)"
-fill="#000000" stroke="none">
-</g>
+<?xml version="1.0" encoding="utf-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="41.833 0 409.668 500" width="409.668px" height="500px">
+  <path d="M 451.501 500 L 246.667 0 L 41.833 500 L 119.413 500 L 123.677 488.017 L 129.121 476.441 L 135.668 465.458 L 143.253 455.172 L 151.805 445.684 L 161.24 437.085 L 171.468 429.457 L 182.39 422.874 L 193.901 417.399 L 205.89 413.085 L 218.243 409.974 L 230.838 408.095 L 243.557 407.467 L 256.275 408.095 L 268.871 409.974 L 281.223 413.085 L 293.213 417.399 L 304.724 422.874 L 315.646 429.457 L 325.874 437.085 L 335.309 445.684 L 343.86 455.172 L 351.446 465.458 L 357.992 476.441 L 363.437 488.017 L 367.7 500 L 451.501 500 Z" fill="blue" stroke="none" style="stroke-width: 1;" transform="matrix(1, 0, 0, 1, 7.105427357601002e-15, 1.4210854715202004e-14)"/>
 </svg>
